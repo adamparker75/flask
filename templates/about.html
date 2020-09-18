@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>About</h2>
+
+{{ company[1]["name"] }} <!--Because this is an array we can refer to it using standard Python notation [0] to get the first element from the array, and [name] to get the name field-->
+
+
+<h2>{{ page_title }}</h2> <!--Two curly braces denote an expression that's going to display on the page, page_title is the variable we added to run.py-->
 <p>
 	The formation of the group grew out of a meeting Gandalf had with Thorin in Bree which kindled Thorin's interest in
 	recapturing his long lost family inheritance. (Thorin's grandfather had been the king of the Lonely Mountain when
