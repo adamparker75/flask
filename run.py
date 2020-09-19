@@ -1,8 +1,9 @@
 import os  # import os from the python library
 import json
-from flask import Flask, render_template  # import the class Flask and the render_template
+from flask import Flask, render_template, request, flash  # import the class Flask and the render_template and the request library
 
 app = Flask(__name__)  # create an instance of the class and store in a variable called app the first argument os the name of the applications module
+app.secret_key = 'Some_secret'
 
 
 @app.route('/')  # when the root directory is browsed flask triggers this function
@@ -21,7 +22,7 @@ def about():
 @app.route('/about/<member_name>')
 def about_member(member_name):
     member = {}
-    
+
     with open("data/company.json", "r") as json_data:
         data = json.load(json_data)
         for obj in data:  # Loop through the data array
@@ -31,8 +32,12 @@ def about_member(member_name):
     return render_template("member.html", member=member)
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])  # The mothods allowed on the contact form are GET and POST
 def contact():
+    def contact():
+        if request.method == "POST":  # if the request method is POST
+            flash("Thanks {} we have received your message!".format(request.form["name"]))
+
     return render_template("contact.html", page_title='Contact')  # The page title is a variable with a string as a value
 
 
@@ -45,3 +50,7 @@ if __name__ == '__main__':  # main is the name of the default module in python, 
     app.run(host=os.environ.get('IP'),  # these are the arguments we run our app with
             port=int(os.environ.get('PORT')),
             debug=True)  # dont use this in a production application
+
+'''
+Flashed messages are non-permanent messages
+'''
