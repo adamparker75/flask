@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{{ company[1]["name"] }} <!--Because this is an array we can refer to it using standard Python notation [0] to get the first element from the array, and [name] to get the name field-->
 
 
-<h2>{{ page_title }}</h2> <!--Two curly braces denote an expression that's going to display on the page, page_title is the variable we added to run.py-->
+
+<h2>{{ page_title }}</h2>
+<!--Two curly braces denote an expression that's going to display on the page, page_title is the variable we added to run.py-->
 <p>
 	The formation of the group grew out of a meeting Gandalf had with Thorin in Bree which kindled Thorin's interest in
 	recapturing his long lost family inheritance. (Thorin's grandfather had been the king of the Lonely Mountain when
@@ -14,32 +15,55 @@
 	action. The superstitious Dwarves also considered thirteen to be an unlucky number, and as Gandalf had planned to
 	leave on other business, welcomed a fourteenth to fill into their party.
 </p>
+
+{% for member in company %}
+<!--This for loop iterates through all the data in the company.json file, down to the endfor and injects the HTML and the variables we have set here-->
+
+
+
 <div class="row featurette">
+
+	{% if loop.index % 2 != 0 %}
+	<!--This checks hte loop index and divides it by 2, if it doesn't divide cleanly then it will display the below HTML-->
+
 	<div class="col-md-7">
-		<h3>Thorin Oakenshield</h3>
+		<h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }} </a></h3>
+		<!-- This takes the name value from each member object. The loop object is included with jinja templating language, here we're using the index property
+        member.url is a new key and value created in our company.json file. And we've created an <a> link out of their name.
+        -->
 		<p>
-			In the year TA 2746, Thorin II was born to Dwarven prince Thráin II in the mountain city of The Lonely
-			Mountain. Early in his youth, he and the other Dwarves of the Lonely Mountain were forced to flee by the
-			dragon Smaug in TA 2770. While in exile, he quickly grew to become a capable warrior. This was demonstrated
-			when he participated in the Battle of Azanulbizar in TA 2799. He marched with one of the Dwarven armies
-			beneath the East-gate of Moria. At some point in the fighting, his shield broke, and using an oaken tree
-			branch found on the floor as a shield, he gained the epithet "Oakenshield," which would remain with him even
-			in death.
+			{{ member.description }}
+			<!--This takes the description value for each member object-->
 		</p>
 	</div>
 	<div class="col-md-5">
-		<img class="featurette-image img-responsive" src="http://www.panhistoria.com/Stacks/Novels/characterimages/T27293.jpg" style="width:100%;" alt="Generic placeholder image">
+		<img class="featurette-image img-responsive" src="{{ member.image_source }}" style="width:100%;" alt="Generic placeholder image">
     </div>
-	</div>
-    <hr class="featurette-divider">
-<div class="row featurette">
-    <div class="col-md-5">
-        <img class="featurette-image img-responsive" src="http://www.filmofilia.com/wp-content/uploads/2011/07/hobbit_0.jpg" style="width:100%;" alt="Generic placeholder image">
+		{% else %}
+        <!--This else statement displays the image first if the index is even-->
+		<div class="col-md-5">
+			<img class="featurette-image img-responsive" src="{{ member.image_source }}" style="width:100%;" alt="Generic placeholder image">
     </div>
     <div class="col-md-7">
-        <h3 class="featurette-heading">Kili &amp; Fili</h3>
-        <p class="lead">Fíli and Kíli were the two most active dwarves of Thorin's company, and apart from Balin, and possibly Bombur, they appeared more frequently as "individual" characters in Tolkien's novel than the rest of Thorin's companions, who were most often
-            named only in "group" references to the entire company.</p>
-    </div>
-</div>
-	{% endblock %}
+		<h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }} </a></h3>
+		<!-- This takes the name value from each member object. The loop object is included with jinja templating language, here we're using the index property-->
+		<p>
+			{{ member.description }}
+			<!--This takes the description value for each member object-->
+		</p>
+	</div>
+			{% endif %}
+			<!-- This finishes the if statement-->
+		</div>
+
+        {% if loop.index != 13 %}
+        <!--If the loop index is not 13, the below horizontal rule will be displayed-->
+
+		<hr class="featurette-divider">
+
+        {% endif %}
+
+		{% endfor %}
+		<!--Every time the for loop is evaluated the HTML inside the for loop is going to be injected into our template-->
+
+		{% endblock %}

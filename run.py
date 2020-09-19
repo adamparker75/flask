@@ -18,6 +18,19 @@ def about():
     return render_template("about.html", page_title='About', company=data)  # whenever we navigate to /about, this template will be returned.
 
 
+@app.route('/about/<member_name>')
+def about_member(member_name):
+    member = {}
+    
+    with open("data/company.json", "r") as json_data:
+        data = json.load(json_data)
+        for obj in data:  # Loop through the data array
+            if obj["url"] == member_name:  # If the link = member name
+                member = obj  # then we'll return the member object
+
+    return render_template("member.html", member=member)
+
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html", page_title='Contact')  # The page title is a variable with a string as a value
